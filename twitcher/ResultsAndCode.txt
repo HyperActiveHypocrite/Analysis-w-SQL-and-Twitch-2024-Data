@@ -1,0 +1,121 @@
+
+
+MY FINDINGS! And the code.
+
+
+Questions I wanted to answer: 
+
+Which games are streamed the most?
+What days are streamers most active?
+Is there a relationship between number of days streaming and followers gained?
+Is there a relationship with most played game and most number of viewers?
+
+
+FINDINGS:
+
+
+------------------- TOP 10 MOST STREAMED GAME (DESCENDING ORDER) -------------------
+
+Count/tally up the number of times a game has been played from most_streamed_game and name it streamed count,
+
+CODE:
+SELECT most_streamed_game, COUNT(*) as streamed_count FROM streamers2024 GROUP BY most_streamed_game ORDER BY streamer_count DESC LIMIT 10;
+
+Just Chatting|257
+League of Legends|84
+Grand Theft Auto V|74
+VALORANT|60
+Casino|36
+Fortnite|35
+Dota 2|35
+Counter-Strike|31
+Minecraft|24
+Virtual Casino|23   // wow casino was this popular (?) is gambling still okay on twitch??
+
+
+
+
+------ MOST ACTIVE DAY -----------
+
+CODE: 
+
+SELECT most_active_day, COUNT(*) AS streamer_count
+FROM streamers2024
+GROUP BY most_active_day;
+
+results:
+
+Friday|117
+Monday|118
+Saturday|132
+Sunday|129
+Thursday|144
+Tuesday|183
+Wednesday|176
+
+--------- What days are streamers most active? -----------------
+
+CODE: 
+SELECT name,total_followers FROM streamers2024 LIMIT 25;
+
+results:
+(First 25 people)
+
++------------------+-----------------+
+|       name       | total_followers |
++------------------+-----------------+
+| kaicenat         | 10600000        |
+| jynxzi           | 5760000         |
+| caedrel          | 797000          |
+| caseoh_          | 4220000         |
+| ibai             | 15600000        |
+| auronplay        | 16300000        |
+| zerator          | 1570000         |
+| tarik            | 3110000         |
+| riotgames        | 6860000         |
+| papaplatte       | 2410000         |
+| dota2_paragon_ru | 352000          |
+| aminematue       | 2590000         |
+| kato_junichi0817 | 939000          |
+| fps_shaka        | 1420000         |
+| illojuan         | 4090000         |
+| hasanabi         | 2570000         |
+| montanablack88   | 5340000         |
+| playapex         | 1210000         |
+| lolpacifictw     | 281000          |
+| pgl_dota2        | 450000          |
+| xqc              | 12000000        |
+| loud_coringa     | 5380000         |
+| raderaderader    | 689000          |
+| gaules           | 4139999         |
+| yuuri22          | 564000          |
++------------------+-----------------+
+
+
+
+----------Is there a relationship between number of days streaming and followers gained?---------------------
+
+To find out I got the active days per week then get the average of followers gained per stream grouped together. Then have it go down in a descending order via active days per week. Average followers gained are rounded by 2.
+
+- converted days streamed as integer to have it as a whole number rather than a float
+
+
+CODE: 
+sqlite> .mode table
+SELECT CAST(active_days_per_week AS INTEGER),ROUND(AVG(followers_gained_per_stream),2) AS avg_followers_gained FROM streamers2024 GROUP BY active_days_per_week ORDER BY active_days_per_week;
+
+
+
+Surprisingly in the top 1000 streamers they still get a good amount of followers if they didn't stream (which we can infer that the followers came from other sources like social media, youtube or other platforms). The more they streamed the less followers they get which is the opposite of what I was predicting. Seems to be you get more followers if you streamed not as much and stick to 1-4 days.
++---------------+----------------------+
+| days_streamed | avg_followers_gained |
++---------------+----------------------+
+| 0             | 3327.48              |
+| 1             | 3670.64              |
+| 2             | 3466.74              |
+| 3             | 3720.16              |
+| 4             | 3453.23              |
+| 5             | 3153.48              |
+| 6             | 2732.05              |
+| 7             | 2225.0               |
+	
