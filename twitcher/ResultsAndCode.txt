@@ -1,9 +1,8 @@
 
-
 MY FINDINGS! And the code.
 
 
-Questions I wanted to answer: 
+Questions I wanted to answer:
 
 Which games are streamed the most?
 What days are streamers most active?
@@ -14,10 +13,10 @@ Is there a relationship with most played game and most number of viewers?
 FINDINGS:
 
 
-------------------- TOP 10 MOST STREAMED GAME (DESCENDING ORDER) -------------------
+------------------- QUERY 1 : TOP 10 MOST STREAMED GAME (DESCENDING ORDER) -------------------
 
 Count/tally up the number of times a game has been played from most_streamed_game and name it streamed count,
-
+There was in fact a trend where people hyped gambling games during 2024 for some reason until twitch made more restrictions on that. Just chatting seems consistently popular throughout the years, for both fan interactions and the streamers it is a good choice to start and establish a connection with your chat. 
 CODE:
 SELECT most_streamed_game, COUNT(*) as streamed_count FROM streamers2024 GROUP BY most_streamed_game ORDER BY streamer_count DESC LIMIT 10;
 
@@ -35,9 +34,9 @@ Virtual Casino|23   // wow casino was this popular (?) is gambling still okay on
 
 
 
------- MOST ACTIVE DAY -----------
+------ Query 2 : What days are streamers most active? -----------
 
-CODE: 
+CODE:
 
 SELECT most_active_day, COUNT(*) AS streamer_count
 FROM streamers2024
@@ -53,9 +52,10 @@ Thursday|144
 Tuesday|183
 Wednesday|176
 
---------- What days are streamers most active? -----------------
+All close in terms of numbers but Tuesday seems to be the most busiest day. Friday and the weekends seem to be less perhaps due to people typically being out more. 
+--------- Query 3 : TOP 25 Streamers -----------------
 
-CODE: 
+CODE:
 SELECT name,total_followers FROM streamers2024 LIMIT 25;
 
 results:
@@ -93,14 +93,14 @@ results:
 
 
 
-----------Is there a relationship between number of days streaming and followers gained?---------------------
+---------- Query 4 : Is there a relationship between number of days streaming and followers gained?---------------------
 
 To find out I got the active days per week then get the average of followers gained per stream grouped together. Then have it go down in a descending order via active days per week. Average followers gained are rounded by 2.
 
 - converted days streamed as integer to have it as a whole number rather than a float
 
 
-CODE: 
+CODE:
 sqlite> .mode table
 SELECT CAST(active_days_per_week AS INTEGER),ROUND(AVG(followers_gained_per_stream),2) AS avg_followers_gained FROM streamers2024 GROUP BY active_days_per_week ORDER BY active_days_per_week;
 
